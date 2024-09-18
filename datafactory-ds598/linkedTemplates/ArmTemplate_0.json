@@ -203,23 +203,13 @@
 					"referenceName": "Historical",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"Current_Start": {
-						"type": "string",
-						"defaultValue": "\"@{ticks(addDays(variables('startDate'), mul(item(), 7)))}\""
-					},
-					"Current_End": {
-						"type": "string",
-						"defaultValue": "\"@{ticks(addDays(variables('currentStart'), 7))}\""
-					}
-				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "HttpServerLocation",
 						"relativeUrl": {
-							"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=@{div(int(dataset().Current_Start), 10000000)}&end=@{div(int(dataset().Current_End), 10000000)}&appid=86b7f26c6a480325c3f07e635042c235\n",
+							"value": "data/2.5/history/city?lat=41.85&lon=-87.65&type=hour&start=1726195200&end=1727731200&appid=86b7f26c6a480325c3f07e635042c235\n",
 							"type": "Expression"
 						}
 					}
@@ -318,6 +308,11 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"variables": {
+					"Current_Index": {
+						"type": "Integer"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -354,7 +349,7 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach2",
 						"type": "ForEach",
 						"dependsOn": [
 							{
@@ -367,13 +362,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@range(0, div(sub(ticks(convertFromUtc(pipeline().parameters.End_date, 'UTC')), ticks(convertFromUtc(pipeline().parameters.Start_date, 'UTC'))), 6048000000000))",
+								"value": "@variables('Date_Range')",
 								"type": "Expression"
 							},
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Copy data1",
+									"name": "Copy data2",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -404,22 +399,58 @@
 												"type": "JsonWriteSettings"
 											}
 										},
-										"enableStaging": false
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "$['message']"
+													},
+													"sink": {
+														"path": "$['message']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['cod']"
+													},
+													"sink": {
+														"path": "$['cod']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['city_id']"
+													},
+													"sink": {
+														"path": "$['city_id']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['calctime']"
+													},
+													"sink": {
+														"path": "$['calctime']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['cnt']"
+													},
+													"sink": {
+														"path": "$['cnt']"
+													}
+												}
+											]
+										}
 									},
 									"inputs": [
 										{
 											"referenceName": "Historical_Weather",
 											"type": "DatasetReference",
-											"parameters": {
-												"Current_Start": {
-													"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), mul(item(), 7)))}\"",
-													"type": "Expression"
-												},
-												"Current_End": {
-													"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), add(mul(item(), 7), 7)))}\"",
-													"type": "Expression"
-												}
-											}
+											"parameters": {}
 										}
 									],
 									"outputs": [
@@ -437,24 +468,10 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"parameters": {
-					"Start_date": {
-						"type": "String",
-						"defaultValue": "\"@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}\""
-					},
-					"End_date": {
-						"type": "String",
-						"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
-					}
-				},
 				"variables": {
-					"Start_Date": {
+					"Date_Range": {
 						"type": "String",
-						"defaultValue": "\"@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}\""
-					},
-					"End_Date": {
-						"type": "String",
-						"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
+						"defaultValue": "[[{ \"Start_Date\": \"2023-09-18T00:00:00Z\",                     \"End_Date\": \"2023-09-24T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-09-25T00:00:00Z\",                     \"End_Date\": \"2023-10-01T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-10-02T00:00:00Z\",                     \"End_Date\": \"2023-10-08T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-10-09T00:00:00Z\",                     \"End_Date\": \"2023-10-15T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-10-16T00:00:00Z\",                     \"End_Date\": \"2023-10-22T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-10-23T00:00:00Z\",                     \"End_Date\": \"2023-10-29T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-10-30T00:00:00Z\",                     \"End_Date\": \"2023-11-05T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-11-06T00:00:00Z\",                     \"End_Date\": \"2023-11-12T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-11-13T00:00:00Z\",                     \"End_Date\": \"2023-11-19T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-11-20T00:00:00Z\",                     \"End_Date\": \"2023-11-26T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-11-27T00:00:00Z\",                     \"End_Date\": \"2023-12-03T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-12-04T00:00:00Z\",                     \"End_Date\": \"2023-12-10T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-12-11T00:00:00Z\",                     \"End_Date\": \"2023-12-17T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-12-18T00:00:00Z\",                     \"End_Date\": \"2023-12-24T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2023-12-25T00:00:00Z\",                     \"End_Date\": \"2023-12-31T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-01-01T00:00:00Z\",                     \"End_Date\": \"2024-01-07T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-01-08T00:00:00Z\",                     \"End_Date\": \"2024-01-14T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-01-15T00:00:00Z\",                     \"End_Date\": \"2024-01-21T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-01-22T00:00:00Z\",                     \"End_Date\": \"2024-01-28T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-01-29T00:00:00Z\",                     \"End_Date\": \"2024-02-04T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-02-05T00:00:00Z\",                     \"End_Date\": \"2024-02-11T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-02-12T00:00:00Z\",                     \"End_Date\": \"2024-02-18T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-02-19T00:00:00Z\",                     \"End_Date\": \"2024-02-25T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-02-26T00:00:00Z\",                     \"End_Date\": \"2024-03-03T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-03-04T00:00:00Z\",                     \"End_Date\": \"2024-03-10T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-03-11T00:00:00Z\",                     \"End_Date\": \"2024-03-17T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-03-18T00:00:00Z\",                     \"End_Date\": \"2024-03-24T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-03-25T00:00:00Z\",                     \"End_Date\": \"2024-03-31T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-04-01T00:00:00Z\",                     \"End_Date\": \"2024-04-07T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-04-08T00:00:00Z\",                     \"End_Date\": \"2024-04-14T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-04-15T00:00:00Z\",                     \"End_Date\": \"2024-04-21T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-04-22T00:00:00Z\",                     \"End_Date\": \"2024-04-28T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-04-29T00:00:00Z\",                     \"End_Date\": \"2024-05-05T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-05-06T00:00:00Z\",                     \"End_Date\": \"2024-05-12T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-05-13T00:00:00Z\",                     \"End_Date\": \"2024-05-19T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-05-20T00:00:00Z\",                     \"End_Date\": \"2024-05-26T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-05-27T00:00:00Z\",                     \"End_Date\": \"2024-06-02T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-06-03T00:00:00Z\",                     \"End_Date\": \"2024-06-09T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-06-10T00:00:00Z\",                     \"End_Date\": \"2024-06-16T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-06-17T00:00:00Z\",                     \"End_Date\": \"2024-06-23T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-06-24T00:00:00Z\",                     \"End_Date\": \"2024-06-30T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-07-01T00:00:00Z\",                     \"End_Date\": \"2024-07-07T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-07-08T00:00:00Z\",                     \"End_Date\": \"2024-07-14T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-07-15T00:00:00Z\",                     \"End_Date\": \"2024-07-21T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-07-22T00:00:00Z\",                     \"End_Date\": \"2024-07-28T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-07-29T00:00:00Z\",                     \"End_Date\": \"2024-08-04T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-08-05T00:00:00Z\",                     \"End_Date\": \"2024-08-11T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-08-12T00:00:00Z\",                     \"End_Date\": \"2024-08-18T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-08-19T00:00:00Z\",                     \"End_Date\": \"2024-08-25T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-08-26T00:00:00Z\",                     \"End_Date\": \"2024-09-01T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-09-02T00:00:00Z\",                     \"End_Date\": \"2024-09-08T00:00:00Z\"                 },                 {                     \"Start_Date\": \"2024-09-09T00:00:00Z\",                     \"End_Date\": \"2024-09-15T00:00:00Z\"}]"
 					}
 				},
 				"annotations": []
