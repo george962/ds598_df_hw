@@ -37,7 +37,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@range(1, add(div(sub(ticks(variables('End_Date')),1), ticks(variables('Start_Date'))), 604800000))",
+						"value": "@range(0, div(sub(ticks(variables('End_Date')), ticks(variables('Start_Date'))), 6048000000000))\n",
 						"type": "Expression"
 					},
 					"isSequential": true,
