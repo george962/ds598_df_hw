@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Historical_Weather",
 	"properties": {
 		"activities": [
 			{
@@ -55,12 +55,14 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "RestSource",
-									"httpRequestTimeout": "00:01:40",
-									"requestInterval": "00.00:00:00.010",
-									"requestMethod": "GET",
-									"paginationRules": {
-										"supportRFC5988": "true"
+									"type": "JsonSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "JsonReadSettings"
 									}
 								},
 								"sink": {
@@ -77,18 +79,8 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "RestResource1",
-									"type": "DatasetReference",
-									"parameters": {
-										"Current_Start": {
-											"value": "@addDays(variables('Start_Date'), mul(7, item()))",
-											"type": "Expression"
-										},
-										"Current_End": {
-											"value": "@addDays(variables('End_Date'), 6)",
-											"type": "Expression"
-										}
-									}
+									"referenceName": "Json1",
+									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
