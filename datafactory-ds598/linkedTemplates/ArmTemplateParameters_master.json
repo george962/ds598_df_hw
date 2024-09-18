@@ -26,6 +26,15 @@
 		"Storage_properties_typeProperties_url": {
 			"value": "https://ds598storage.dfs.core.windows.net/"
 		},
+		"HttpServer1_properties_typeProperties_url": {
+			"value": "https://history.openweathermap.org/"
+		},
+		"Historical_properties_typeProperties_url": {
+			"value": "https://history.openweathermap.org/"
+		},
+		"Air_Pollution_properties_typeProperties_url": {
+			"value": " http://api.openweathermap.org/ "
+		},
 		"containerUri": {
 			"value": ""
 		},

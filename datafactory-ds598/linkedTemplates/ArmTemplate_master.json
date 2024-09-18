@@ -35,6 +35,18 @@
 			"type": "string",
 			"defaultValue": "https://ds598storage.dfs.core.windows.net/"
 		},
+		"HttpServer1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://history.openweathermap.org/"
+		},
+		"Historical_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://history.openweathermap.org/"
+		},
+		"Air_Pollution_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": " http://api.openweathermap.org/ "
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -82,6 +94,15 @@
 					},
 					"Storage_properties_typeProperties_url": {
 						"value": "[parameters('Storage_properties_typeProperties_url')]"
+					},
+					"HttpServer1_properties_typeProperties_url": {
+						"value": "[parameters('HttpServer1_properties_typeProperties_url')]"
+					},
+					"Historical_properties_typeProperties_url": {
+						"value": "[parameters('Historical_properties_typeProperties_url')]"
+					},
+					"Air_Pollution_properties_typeProperties_url": {
+						"value": "[parameters('Air_Pollution_properties_typeProperties_url')]"
 					}
 				}
 			},
