@@ -57,9 +57,8 @@
 								"source": {
 									"type": "JsonSource",
 									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
 									},
 									"formatSettings": {
 										"type": "JsonReadSettings"
@@ -68,8 +67,7 @@
 								"sink": {
 									"type": "JsonSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings",
-										"copyBehavior": "FlattenHierarchy"
+										"type": "AzureBlobFSWriteSettings"
 									},
 									"formatSettings": {
 										"type": "JsonWriteSettings"
@@ -79,13 +77,13 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "Json1",
+									"referenceName": "Historical_Weather",
 									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "Json1",
+									"referenceName": "ADLS_Historical",
 									"type": "DatasetReference"
 								}
 							]

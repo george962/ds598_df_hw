@@ -1,17 +1,15 @@
 {
-	"name": "ADLS_Historical",
+	"name": "Historical_Weather",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Storage",
+			"referenceName": "Historical",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"folderPath": "Bronze",
-				"fileSystem": "container-ds598"
+				"type": "HttpServerLocation"
 			}
 		},
 		"schema": {}
