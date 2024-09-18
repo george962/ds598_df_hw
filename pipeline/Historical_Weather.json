@@ -82,11 +82,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"Current_Start": {
-											"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), mul(item(), 7)))}\"",
+											"value": "@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), mul(variables('Current_Index'), 7)))}",
 											"type": "Expression"
 										},
 										"Current_End": {
-											"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), add(mul(item(), 7), 7)))}\"",
+											"value": "@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), add(mul(variables('Current_Index'), 7), 7)))}\n",
 											"type": "Expression"
 										}
 									}
@@ -111,16 +111,15 @@
 			"End_date": {
 				"type": "String",
 				"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
+			},
+			"Current_Index": {
+				"type": "int",
+				"defaultValue": 0
 			}
 		},
 		"variables": {
-			"Start_Date": {
-				"type": "String",
-				"defaultValue": "\"@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}\""
-			},
-			"End_Date": {
-				"type": "String",
-				"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
+			"Current_Index": {
+				"type": "Integer"
 			}
 		},
 		"annotations": []
