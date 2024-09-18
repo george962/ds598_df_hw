@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "AzureKeyVault",
 		"typeProperties": {
-			"baseUrl": "https://openweather.vault.azure.net/secrets/OpenWeatherAPI/945ba958d3f544448ee21400a2abbd81"
+			"baseUrl": "https://OpenWeather.vault.azure.net/"
 		}
 	}
 }
