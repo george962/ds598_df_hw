@@ -68,8 +68,7 @@
 								"sink": {
 									"type": "JsonSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings",
-										"copyBehavior": "FlattenHierarchy"
+										"type": "AzureBlobFSWriteSettings"
 									},
 									"formatSettings": {
 										"type": "JsonWriteSettings"
@@ -117,126 +116,6 @@
 											},
 											"sink": {
 												"path": "$['cnt']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['dt']"
-											},
-											"sink": {
-												"path": "$['list'][0]['dt']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['temp']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['feels_like']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['feels_like']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['pressure']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['pressure']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['humidity']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['humidity']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp_min']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['temp_min']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp_max']"
-											},
-											"sink": {
-												"path": "$['list'][0]['main']['temp_max']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['speed']"
-											},
-											"sink": {
-												"path": "$['list'][0]['wind']['speed']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['deg']"
-											},
-											"sink": {
-												"path": "$['list'][0]['wind']['deg']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['gust']"
-											},
-											"sink": {
-												"path": "$['list'][0]['wind']['gust']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['clouds']['all']"
-											},
-											"sink": {
-												"path": "$['list'][0]['clouds']['all']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['id']"
-											},
-											"sink": {
-												"path": "$['list'][0]['weather'][0]['id']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['main']"
-											},
-											"sink": {
-												"path": "$['list'][0]['weather'][0]['main']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['description']"
-											},
-											"sink": {
-												"path": "$['list'][0]['weather'][0]['description']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['icon']"
-											},
-											"sink": {
-												"path": "$['list'][0]['weather'][0]['icon']"
 											}
 										}
 									]
