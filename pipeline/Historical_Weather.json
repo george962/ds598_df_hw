@@ -37,7 +37,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@range(0, div(sub(ticks(convertFromUtc(variables('End_Date'), 'UTC')), ticks(convertFromUtc(variables('Start_Date'), 'UTC'))), 6048000000000))\n\n\n",
+						"value": "@range(0, div(sub(ticks(convertFromUtc(pipeline().parameters.End_date, 'UTC')), ticks(convertFromUtc(pipeline().parameters.Start_date, 'UTC'))), 6048000000000))",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -82,11 +82,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"Current_Start": {
-											"value": "\"@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), mul(item(), 7)))}\"\n",
+											"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), mul(item(), 7)))}\"",
 											"type": "Expression"
 										},
 										"Current_End": {
-											"value": "\"@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), add(mul(item(), 7), 7)))}\"",
+											"value": "\"@{ticks(addDays(convertFromUtc(pipeline().parameters.Start_date, 'UTC'), add(mul(item(), 7), 7)))}\"",
 											"type": "Expression"
 										}
 									}
@@ -103,6 +103,16 @@
 				}
 			}
 		],
+		"parameters": {
+			"Start_date": {
+				"type": "String",
+				"defaultValue": "\"@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}\""
+			},
+			"End_date": {
+				"type": "String",
+				"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
+			}
+		},
 		"variables": {
 			"Start_Date": {
 				"type": "String",
