@@ -21,7 +21,7 @@
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": {
-					"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=1672531200&end=1680316800&appid=86b7f26c6a480325c3f07e635042c235\n",
+					"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=@{div(int(dataset().Current_Start), 10000000)}&end=@{div(int(dataset().Current_End), 10000000)}&appid=86b7f26c6a480325c3f07e635042c235\n",
 					"type": "Expression"
 				}
 			}
