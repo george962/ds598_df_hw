@@ -384,7 +384,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@range(0, div(sub(ticks(variables('End_Date')), ticks(variables('Start_Date'))), 6048000000000))\n",
+								"value": "@range(0, div(sub(ticks(convertFromUtc(variables('End_Date'), 'UTC')), ticks(convertFromUtc(variables('Start_Date'), 'UTC'))), 6048000000000))\n\n\n",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -429,11 +429,11 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"Current_Start": {
-													"value": "\"@{ticks(addDays(variables('Start_Date'), mul(item(), 7)))}\"",
+													"value": "@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), mul(item(), 7)))}\n",
 													"type": "Expression"
 												},
 												"Current_End": {
-													"value": "\"@{ticks(addDays(variables('Start_Date'), add(mul(item(), 7), 7)))}\"\n",
+													"value": "@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), add(mul(item(), 7), 7)))}\n",
 													"type": "Expression"
 												}
 											}
