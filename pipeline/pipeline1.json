@@ -34,9 +34,10 @@
 						]
 					}
 				],
+				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('End_Date')",
+						"value": "@range(0, div(sub(ticks(variables('End_Date')), ticks(variables('Start_Date'))), 6048000000000))",
 						"type": "Expression"
 					},
 					"activities": [
@@ -77,7 +78,17 @@
 							"inputs": [
 								{
 									"referenceName": "RestResource1",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"Current_Start": {
+											"value": "@addDays(variables('Start_Date'), mul(7, item()))",
+											"type": "Expression"
+										},
+										"Current_End": {
+											"value": "@addDays(variables('End_Date'), 6)",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [
@@ -94,11 +105,11 @@
 		"variables": {
 			"Start_Date": {
 				"type": "String",
-				"defaultValue": "ticks('2023-09-17 00:00:00')"
+				"defaultValue": "@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}"
 			},
 			"End_Date": {
 				"type": "String",
-				"defaultValue": "ticks('2024-09-16 00:00:00')"
+				"defaultValue": "@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}"
 			}
 		},
 		"annotations": []
