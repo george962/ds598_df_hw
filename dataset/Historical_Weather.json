@@ -5,23 +5,13 @@
 			"referenceName": "Historical",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"Current_Start": {
-				"type": "string",
-				"defaultValue": "\"@{ticks(addDays(variables('startDate'), mul(item(), 7)))}\""
-			},
-			"Current_End": {
-				"type": "string",
-				"defaultValue": "\"@{ticks(addDays(variables('currentStart'), 7))}\""
-			}
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": {
-					"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=@{div(int(dataset().Current_Start), 10000000)}&end=@{div(int(dataset().Current_End), 10000000)}&appid=86b7f26c6a480325c3f07e635042c235\n",
+					"value": "data/2.5/history/city?lat=41.85&lon=-87.65&type=hour&start=1726195200&end=1727731200&appid=86b7f26c6a480325c3f07e635042c235\n",
 					"type": "Expression"
 				}
 			}
