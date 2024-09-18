@@ -40,6 +40,7 @@
 						"value": "@range(1, add(div(sub(ticks(variables('End_Date')),1), ticks(variables('Start_Date'))), 604800000))",
 						"type": "Expression"
 					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Copy data1",
