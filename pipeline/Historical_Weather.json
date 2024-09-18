@@ -178,7 +178,8 @@
 												"path": "$['list'][0]['weather'][0]['icon']"
 											}
 										}
-									]
+									],
+									"collectionReference": ""
 								}
 							},
 							"inputs": [
