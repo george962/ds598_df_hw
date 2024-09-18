@@ -78,7 +78,11 @@
 							"inputs": [
 								{
 									"referenceName": "Historical_Weather",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"Current_Start": "\"@{ticks(addDays(variables('startDate'), mul(item(), 7)))}\"",
+										"Current_End": "\"@{ticks(addDays(variables('currentStart'), 7))}\""
+									}
 								}
 							],
 							"outputs": [

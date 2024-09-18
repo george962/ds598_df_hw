@@ -1,0 +1,21 @@
+{
+	"name": "Air_Pollution",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Air_Pollution",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "data/2.5/history/city?lat=@{dataset().lat}&lon=@{data\nset().lon}&type=@{dataset().dataType}&start=@{dataset\nHW2: Historical Data Ingestion 11\n().start}&end=@{dataset().end}&appid=@{dataset().appi\nd}",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	}
+}
