@@ -81,41 +81,101 @@
 										{
 											"source": {
 												"path": "$['message']"
-											},
-											"sink": {
-												"path": "$['message']"
 											}
 										},
 										{
 											"source": {
-												"path": "$['cod']"
-											},
-											"sink": {
 												"path": "$['cod']"
 											}
 										},
 										{
 											"source": {
 												"path": "$['city_id']"
-											},
-											"sink": {
-												"path": "$['city_id']"
 											}
 										},
 										{
 											"source": {
-												"path": "$['calctime']"
-											},
-											"sink": {
 												"path": "$['calctime']"
 											}
 										},
 										{
 											"source": {
 												"path": "$['cnt']"
-											},
-											"sink": {
-												"path": "$['cnt']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['dt']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['temp']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['feels_like']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['pressure']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['humidity']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['temp_min']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['main']['temp_max']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['wind']['speed']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['wind']['deg']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['wind']['gust']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['clouds']['all']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['weather'][0]['id']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['weather'][0]['main']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['weather'][0]['description']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['list'][0]['weather'][0]['icon']"
 											}
 										}
 									]
