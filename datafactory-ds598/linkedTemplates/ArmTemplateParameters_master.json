@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datafactory-ds598"
+		},
+		"GitHub_credential": {
+			"value": ""
+		},
+		"Storage_accountKey": {
+			"value": ""
+		},
+		"GitHub_properties_typeProperties_username": {
+			"value": "george962"
+		},
+		"HistoricalAirPollution_properties_typeProperties_url": {
+			"value": "http://api.openweathermap.org/"
+		},
+		"HistoricalWeather_properties_typeProperties_url": {
+			"value": "https://history.openweathermap.org/"
+		},
+		"KeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://OpenWeather.vault.azure.net/"
+		},
+		"Storage_properties_typeProperties_url": {
+			"value": "https://ds598storage.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
