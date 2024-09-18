@@ -1,10 +1,6 @@
 {
 	"name": "RestResource1",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "HistoricalWeather",
-			"type": "LinkedServiceReference"
-		},
 		"parameters": {
 			"Current_Start": {
 				"type": "string",

@@ -1,10 +1,6 @@
 {
 	"name": "json",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "HttpServer1",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
