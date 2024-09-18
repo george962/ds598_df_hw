@@ -139,11 +139,11 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"Current_Start": {
-													"value": "@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), mul(item(), 7)))}\n",
+													"value": "\"@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), mul(item(), 7)))}\"\n",
 													"type": "Expression"
 												},
 												"Current_End": {
-													"value": "@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), add(mul(item(), 7), 7)))}\n",
+													"value": "\"@{ticks(addDays(convertFromUtc(variables('Start_Date'), 'UTC'), add(mul(item(), 7), 7)))}\"",
 													"type": "Expression"
 												}
 											}
@@ -167,11 +167,11 @@
 				"variables": {
 					"Start_Date": {
 						"type": "String",
-						"defaultValue": "@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}"
+						"defaultValue": "\"@{formatDateTime(addDays(utcNow(), -365), 'yyyy-MM-ddTHH:mm:ssZ')}\""
 					},
 					"End_Date": {
 						"type": "String",
-						"defaultValue": "@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}"
+						"defaultValue": "\"@{formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ssZ')}\""
 					}
 				},
 				"annotations": []
