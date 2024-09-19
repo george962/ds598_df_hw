@@ -37,7 +37,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('Date_Range')",
+						"value": "@range(0, 52)",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -81,101 +81,41 @@
 										{
 											"source": {
 												"path": "$['message']"
+											},
+											"sink": {
+												"path": "$['message']"
 											}
 										},
 										{
 											"source": {
+												"path": "$['cod']"
+											},
+											"sink": {
 												"path": "$['cod']"
 											}
 										},
 										{
 											"source": {
 												"path": "$['city_id']"
+											},
+											"sink": {
+												"path": "$['city_id']"
 											}
 										},
 										{
 											"source": {
+												"path": "$['calctime']"
+											},
+											"sink": {
 												"path": "$['calctime']"
 											}
 										},
 										{
 											"source": {
 												"path": "$['cnt']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['dt']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['feels_like']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['pressure']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['humidity']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp_min']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['main']['temp_max']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['speed']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['deg']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['wind']['gust']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['clouds']['all']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['id']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['main']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['description']"
-											}
-										},
-										{
-											"source": {
-												"path": "$['list'][0]['weather'][0]['icon']"
+											},
+											"sink": {
+												"path": "$['cnt']"
 											}
 										}
 									],
@@ -185,7 +125,15 @@
 							"inputs": [
 								{
 									"referenceName": "Historical_Weather",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"start": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+										"end": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+										"appid": "@activity('Web1').output.value",
+										"lat": "42.3601",
+										"long": "-71.3824",
+										"dataType": "\"hour\""
+									}
 								}
 							],
 							"outputs": [
