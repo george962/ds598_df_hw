@@ -161,7 +161,26 @@
 						"fileSystem": "container-ds598"
 					}
 				},
-				"schema": {}
+				"schema": {
+					"type": "object",
+					"properties": {
+						"message": {
+							"type": "string"
+						},
+						"cod": {
+							"type": "string"
+						},
+						"city_id": {
+							"type": "integer"
+						},
+						"calctime": {
+							"type": "number"
+						},
+						"cnt": {
+							"type": "integer"
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Storage')]"
@@ -202,13 +221,39 @@
 					"referenceName": "Historical",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"start": {
+						"type": "string",
+						"defaultValue": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)"
+					},
+					"end": {
+						"type": "string",
+						"defaultValue": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)"
+					},
+					"appid": {
+						"type": "string",
+						"defaultValue": "@activity('Web1').output.value"
+					},
+					"lat": {
+						"type": "string",
+						"defaultValue": "42.3601"
+					},
+					"long": {
+						"type": "string",
+						"defaultValue": "-71.3824"
+					},
+					"dataType": {
+						"type": "string",
+						"defaultValue": "\"hour\""
+					}
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "HttpServerLocation",
 						"relativeUrl": {
-							"value": "data/2.5/history/city?lat=41.85&lon=-87.65&type=hour&start=1726195200&end=1727731200&appid=86b7f26c6a480325c3f07e635042c235\n",
+							"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=1726195200&end=1727731200&appid=86b7f26c6a480325c3f07e635042c235\n",
 							"type": "Expression"
 						}
 					}
@@ -361,7 +406,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@variables('Date_Range')",
+								"value": "@range(0, 52)",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -442,14 +487,22 @@
 														"path": "$['cnt']"
 													}
 												}
-											]
+											],
+											"collectionReference": ""
 										}
 									},
 									"inputs": [
 										{
 											"referenceName": "Historical_Weather",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"start": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+												"end": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+												"appid": "@activity('Web1').output.value",
+												"lat": "42.3601",
+												"long": "-71.3824",
+												"dataType": "\"hour\""
+											}
 										}
 									],
 									"outputs": [
