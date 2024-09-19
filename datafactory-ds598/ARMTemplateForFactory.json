@@ -219,53 +219,7 @@
 												"type": "JsonWriteSettings"
 											}
 										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"mappings": [
-												{
-													"source": {
-														"path": "$['message']"
-													},
-													"sink": {
-														"path": "$['message']"
-													}
-												},
-												{
-													"source": {
-														"path": "$['cod']"
-													},
-													"sink": {
-														"path": "$['cod']"
-													}
-												},
-												{
-													"source": {
-														"path": "$['city_id']"
-													},
-													"sink": {
-														"path": "$['city_id']"
-													}
-												},
-												{
-													"source": {
-														"path": "$['calctime']"
-													},
-													"sink": {
-														"path": "$['calctime']"
-													}
-												},
-												{
-													"source": {
-														"path": "$['cnt']"
-													},
-													"sink": {
-														"path": "$['cnt']"
-													}
-												}
-											],
-											"collectionReference": ""
-										}
+										"enableStaging": false
 									},
 									"inputs": [
 										{
