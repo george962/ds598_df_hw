@@ -157,8 +157,8 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "historical_weather.json",
-						"folderPath": "Bronze",
+						"fileName": "@concat(item().name, '.json')",
+						"folderPath": "Bronze/data/2.5/history",
 						"fileSystem": "container-ds598"
 					}
 				},
