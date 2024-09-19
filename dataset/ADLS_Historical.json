@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "@concat(dataset().fileName,'.json')",
 				"folderPath": "Bronze",
 				"fileSystem": "container-ds598"
 			}
