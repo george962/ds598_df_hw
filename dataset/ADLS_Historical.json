@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@concat('filename_', pipeline().TriggerTime, '.json')",
+				"fileName": "@concat('.json')",
 				"folderPath": "Bronze",
 				"fileSystem": "container-ds598"
 			}
