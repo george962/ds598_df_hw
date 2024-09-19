@@ -22,7 +22,7 @@
 				"type": "string",
 				"defaultValue": "42.3601"
 			},
-			"long": {
+			"lon": {
 				"type": "string",
 				"defaultValue": "-71.3824"
 			},
@@ -37,7 +37,7 @@
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": {
-					"value": "data/2.5/history/city?lat=42.3601&lon=-71.0589&type=hour&start=1726195200&end=1727731200&appid=86b7f26c6a480325c3f07e635042c235\n",
+					"value": "data/2.5/history/city?lat=@{dataset().lat}&lon=@{dataset().lon}&type=@{dataset().dataType}&start=@{dataset().start}&end=@{dataset().end}&appid=@{dataset().appid}",
 					"type": "Expression"
 				}
 			}
