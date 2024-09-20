@@ -59,7 +59,10 @@
 									"type": "RestSource",
 									"httpRequestTimeout": "00:01:40",
 									"requestInterval": "00.00:00:00.010",
-									"requestMethod": "GET"
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
 								},
 								"sink": {
 									"type": "JsonSink",
@@ -75,7 +78,15 @@
 							"inputs": [
 								{
 									"referenceName": "RestResource2",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"lat": "42.3601",
+										"lon": "-71.3824",
+										"dataType": "\"hour\"",
+										"appid": "@activity('Web1').output.value",
+										"start": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+										"end": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)"
+									}
 								}
 							],
 							"outputs": [
