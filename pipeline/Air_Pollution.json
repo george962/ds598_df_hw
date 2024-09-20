@@ -26,14 +26,7 @@
 			{
 				"name": "Copy data1",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Web1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -71,8 +64,8 @@
 						"parameters": {
 							"lat": "42.3601",
 							"lon": "-71.0589",
-							"start": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)",
-							"end": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+							"start": "@div(sub(ticks(utcNow()), 315360000000000), ticks('1970-01-01T00:00:00Z'), 10000000)",
+							"end": "@div(ticks(utcNow()), ticks('1970-01-01T00:00:00Z')), 10000000)",
 							"appid": "@activity('Web1').output.value"
 						}
 					}
@@ -83,6 +76,12 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"variables": {
