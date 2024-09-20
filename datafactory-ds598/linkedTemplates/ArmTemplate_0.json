@@ -161,26 +161,7 @@
 						"fileSystem": "container-ds598"
 					}
 				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"message": {
-							"type": "string"
-						},
-						"cod": {
-							"type": "string"
-						},
-						"city_id": {
-							"type": "integer"
-						},
-						"calctime": {
-							"type": "number"
-						},
-						"cnt": {
-							"type": "integer"
-						}
-					}
-				}
+				"schema": {}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/Storage')]"
