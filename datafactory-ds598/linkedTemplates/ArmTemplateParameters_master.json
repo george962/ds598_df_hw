@@ -26,6 +26,12 @@
 		"Storage_properties_typeProperties_url": {
 			"value": "https://ds598storage.dfs.core.windows.net/"
 		},
+		"test_properties_typeProperties_url": {
+			"value": "https://openweather.vault.azure.net/secrets/OpenWeatherAPI/945ba958d3f544448ee21400a2abbd81?api-version=7.0"
+		},
+		"RestService1_properties_typeProperties_url": {
+			"value": "https://history.openweathermap.org/"
+		},
 		"containerUri": {
 			"value": ""
 		},

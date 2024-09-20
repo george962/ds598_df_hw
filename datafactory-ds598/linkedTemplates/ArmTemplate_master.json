@@ -35,6 +35,14 @@
 			"type": "string",
 			"defaultValue": "https://ds598storage.dfs.core.windows.net/"
 		},
+		"test_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://openweather.vault.azure.net/secrets/OpenWeatherAPI/945ba958d3f544448ee21400a2abbd81?api-version=7.0"
+		},
+		"RestService1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://history.openweathermap.org/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -82,6 +90,12 @@
 					},
 					"Storage_properties_typeProperties_url": {
 						"value": "[parameters('Storage_properties_typeProperties_url')]"
+					},
+					"test_properties_typeProperties_url": {
+						"value": "[parameters('test_properties_typeProperties_url')]"
+					},
+					"RestService1_properties_typeProperties_url": {
+						"value": "[parameters('RestService1_properties_typeProperties_url')]"
 					}
 				}
 			},
