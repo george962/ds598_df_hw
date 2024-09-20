@@ -116,8 +116,8 @@
 								"parameters": {
 									"lat": "42.3601",
 									"lon": "-71.0589",
-									"start": "@div(sub(ticks(addDays(utcNow(), add(-7, mul(item(), -7)))), ticks('1970-01-01T00:00:00Z')), 10000000)",
-									"end": "@div(sub(ticks(addDays(utcNow(), mul(item(), -7))), ticks('1970-01-01T00:00:00Z')), 10000000)",
+									"start": "@div(sub(ticks(utcNow()), 315360000000000), ticks('1970-01-01T00:00:00Z'), 10000000)",
+									"end": "@div(ticks(utcNow()), ticks('1970-01-01T00:00:00Z')), 10000000)",
 									"appid": "@activity('Web1').output.value"
 								}
 							}
@@ -582,7 +582,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "HttpServerLocation",
-						"relativeUrl": "data/2.5/air_pollution/history?lat=@{dataset().lat}&lon=@{dataset().lon}&start=@{dataset().start}&end=@{dataset().end}&appid=@{activity('Web1').output.value}"
+						"relativeUrl": {
+							"value": "data/2.5/air_pollution/history?lat=@{dataset().lat}&lon=@{dataset().lon}&start=@{dataset().start}&end=@{dataset().end}&appid=@{activity('Web1').output.value}",
+							"type": "Expression"
+						}
 					}
 				},
 				"schema": {}
