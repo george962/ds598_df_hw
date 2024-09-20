@@ -362,8 +362,8 @@
 								"parameters": {
 									"lat": "42.3601",
 									"lon": "-71.0589",
-									"start": "@div(sub(ticks(utcNow()), 315360000000000), 10000000)",
-									"end": "@sub(ticks(utcNow()), 864000000000)",
+									"start": "@div(sub(ticks(addDays(utcNow(), -365)), ticks('1970-01-01T00:00:00Z')), 10000000)",
+									"end": "@div(sub(ticks(utcNow()), ticks('1970-01-01T00:00:00Z')), 10000000)",
 									"appid": "@activity('Web1').output.value"
 								}
 							}
