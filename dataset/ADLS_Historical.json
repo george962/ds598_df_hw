@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "concat(item(), '.json')",
-				"folderPath": "Bronze",
+				"folderPath": "Bronze/data/2.5/history",
 				"fileSystem": "container-ds598"
 			}
 		},
