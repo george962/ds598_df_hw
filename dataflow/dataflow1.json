@@ -21,6 +21,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -117,7 +121,7 @@
 				"          temp_max_F = round((temp_max * 9/5) + 32, 2),",
 				"          lon = -71.0589,",
 				"          lat = 42.3601,",
-				"          weather_id_value = toInteger(weather_id),",
+				"          weather_id_value = toInteger(split(toString(weather_id), ': ')[1]),",
 				"          weather_main_value = split(toString(weather_main), ': ')[1],",
 				"          {weather_description_value } = split(toString(weather_description), ': ')[1],",
 				"          {weather_icon_value } = split(toString(weather_icon), ': ')[1]) ~> derivedColumn3",
@@ -152,8 +156,15 @@
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     partitionFileNames:['silver_weather_historical.parquet'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
