@@ -1,0 +1,160 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ADLS_Air_Pollution",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ADLS_Historical",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          coord as (lon as double, lat as double),",
+				"          list as (main as (aqi as integer), components as (co as double, no as integer, no2 as double, o3 as double, so2 as double, pm2_5 as double, pm10 as double, nh3 as double), dt as integer)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> source1",
+				"source(output(",
+				"          message as string,",
+				"          cod as string,",
+				"          city_id as integer,",
+				"          calctime as double,",
+				"          cnt as integer,",
+				"          list as (dt as integer, main as (temp as double, feels_like as double, pressure as integer, humidity as integer, temp_min as double, temp_max as double), wind as (speed as double, deg as integer), clouds as (all as integer), weather as (id as integer, main as string, description as string, icon as string)[])[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> source2",
+				"source1 foldDown(unroll(),",
+				"     mapColumn(",
+				"          coord,",
+				"          list",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 derive(corrected_timestamp = if(length(toString(timestamp)) == 10, toInteger(timestamp), toInteger(null()))) ~> derivedColumn1",
+				"source2 foldDown(unroll(list),",
+				"     mapColumn(",
+				"          message,",
+				"          cod,",
+				"          city_id,",
+				"          calctime,",
+				"          cnt,",
+				"          timestamp = list.dt,",
+				"          feels_like = list.main.feels_like,",
+				"          humidity = list.main.humidity,",
+				"          pressure = list.main.pressure,",
+				"          temp = list.main.temp,",
+				"          temp_max = list.main.temp_max,",
+				"          temp_min = list.main.temp_min,",
+				"          weather_description = list.weather.description,",
+				"          weather_icon = list.weather.icon,",
+				"          weather_id = list.weather.id,",
+				"          weather_main = list.weather.main,",
+				"          wind_deg = list.wind.deg,",
+				"          wind_speed = list.wind.speed,",
+				"          clouds_all = list.clouds.all",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 derive(corrected_timestamp = iif(length(toString(timestamp)) > 10, 0, timestamp),",
+				"          location = 'Boston') ~> derivedColumn2",
+				"derivedColumn2 filter(!isNull(temp) && !isNull(humidity) && !isNull(corrected_timestamp) && length(toString(corrected_timestamp)) <= 10",
+				") ~> filter1",
+				"filter1 derive(corrected_timestamp = toTimestamp(toLong(corrected_timestamp) * 1000),",
+				"          id = concat(location, '_', toString(corrected_timestamp)),",
+				"          temp_C = round(temp - 273.15, 2),",
+				"          temp_min_C = round(temp_min - 273.15, 2)",
+				",",
+				"          temp_max_C = round(temp_max - 273.15, 2)",
+				",",
+				"          feels_like_C = round(feels_like - 273.15, 2),",
+				"          feels_like_F = round((feels_like * 9/5) + 32, 2),",
+				"          temp_min_F = round((temp_min * 9/5) + 32, 2),",
+				"          temp_max_F = round((temp_max * 9/5) + 32, 2),",
+				"          lon = -71.0589,",
+				"          lat = 42.3601,",
+				"          weather_id_value = toInteger(weather_id),",
+				"          weather_main_value = split(toString(weather_main), ': ')[1],",
+				"          {weather_description_value } = split(toString(weather_description), ': ')[1],",
+				"          {weather_icon_value } = split(toString(weather_icon), ': ')[1]) ~> derivedColumn3",
+				"derivedColumn3 select(mapColumn(",
+				"          feels_like_K = feels_like,",
+				"          humidity,",
+				"          pressure,",
+				"          temp_K = temp,",
+				"          temp_max_K = temp_max,",
+				"          temp_min_K = temp_min,",
+				"          wind_deg,",
+				"          wind_speed,",
+				"          clouds_all,",
+				"          corrected_timestamp,",
+				"          location,",
+				"          id,",
+				"          temp_C,",
+				"          temp_min_C,",
+				"          temp_max_C,",
+				"          feels_like_C,",
+				"          feels_like_F,",
+				"          temp_min_F,",
+				"          temp_max_F,",
+				"          lon,",
+				"          lat,",
+				"          weather_id_value,",
+				"          weather_main_value,",
+				"          {weather_description_value },",
+				"          {weather_icon_value }",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
