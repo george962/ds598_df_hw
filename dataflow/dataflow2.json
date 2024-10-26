@@ -100,7 +100,7 @@
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['silver_airpollution_historical.parquet'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",

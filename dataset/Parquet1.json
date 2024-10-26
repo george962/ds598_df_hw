@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "historical",
 				"folderPath": "Silver",
 				"fileSystem": "container-ds598"
 			},
