@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "air_pollution",
 				"folderPath": "Silver",
 				"fileSystem": "container-ds598"
 			},
