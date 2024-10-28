@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Historical",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -50,7 +50,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> source2",
+				"     documentForm: 'documentPerLine',",
+				"     wildcardPaths:['Bronze/historical_data/*.json']) ~> source2",
 				"source2 foldDown(unroll(list),",
 				"     mapColumn(",
 				"          message,",

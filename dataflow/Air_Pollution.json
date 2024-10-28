@@ -1,5 +1,5 @@
 {
-	"name": "dataflow2",
+	"name": "Air_Pollution",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -66,8 +66,7 @@
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"flatten1 derive(corrected_timestamp = iif(length(toString(timestamp)) == 10, toInteger(timestamp), toInteger(null())),",
 				"          location = 'Boston') ~> derivedColumn1",
-				"derivedColumn1 filter(!isNull(aqi) && !isNull(timestamp) && length(toString(timestamp)) == 10",
-				") ~> filter1",
+				"derivedColumn1 filter(!isNull(aqi) && !isNull(timestamp) && length(toString(timestamp)) == 10) ~> filter1",
 				"filter1 derive(corrected_timestamp = toTimestamp(toLong(corrected_timestamp) * 1000),",
 				"          id = concat(location, '_', toString(corrected_timestamp)),",
 				"          aqi = round(aqi, 2),",
