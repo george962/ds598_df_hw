@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://OpenWeather.vault.azure.net/"
 		},
+		"RestService1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://history.openweathermap.org/"
+		},
 		"Storage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://ds598storage.dfs.core.windows.net/"
@@ -38,10 +42,6 @@
 		"test_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://openweather.vault.azure.net/secrets/OpenWeatherAPI/945ba958d3f544448ee21400a2abbd81?api-version=7.0"
-		},
-		"RestService1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://history.openweathermap.org/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -88,18 +88,38 @@
 					"KeyVault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('KeyVault_properties_typeProperties_baseUrl')]"
 					},
+					"RestService1_properties_typeProperties_url": {
+						"value": "[parameters('RestService1_properties_typeProperties_url')]"
+					},
 					"Storage_properties_typeProperties_url": {
 						"value": "[parameters('Storage_properties_typeProperties_url')]"
 					},
 					"test_properties_typeProperties_url": {
 						"value": "[parameters('test_properties_typeProperties_url')]"
-					},
-					"RestService1_properties_typeProperties_url": {
-						"value": "[parameters('RestService1_properties_typeProperties_url')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "datafactory-ds598_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactory-ds598_ArmTemplate_0')]"
+			]
 		}
 	]
 }
