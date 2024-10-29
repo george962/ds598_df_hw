@@ -1282,7 +1282,7 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     documentForm: 'documentPerLine',",
-						"     wildcardPaths:['Bronze/historical_data/*.json']) ~> source2",
+						"     wildcardPaths:['Bronze/data/2.5/history/*.json']) ~> source2",
 						"source2 foldDown(unroll(list),",
 						"     mapColumn(",
 						"          message,",
