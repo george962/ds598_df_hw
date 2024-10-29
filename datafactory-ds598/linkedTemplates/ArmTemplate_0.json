@@ -487,6 +487,32 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Parquet2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Storage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "silver_airpollution_historical.parquet",
+						"folderPath": "Silver",
+						"fileSystem": "container-ds598"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Storage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RestResource1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -551,32 +577,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/RestService1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Parquet2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "Storage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "air_pollution",
-						"folderPath": "Silver",
-						"fileSystem": "container-ds598"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/Storage')]"
 			]
 		},
 		{
@@ -1017,6 +1017,125 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Air_Pollution')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ADLS_Air_Pollution",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Parquet2",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "filter1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          coord as (lon as double, lat as double),",
+						"          list as (main as (aqi as integer), components as (co as double, no as integer, no2 as double, o3 as double, so2 as double, pm2_5 as double, pm10 as double, nh3 as double), dt as integer)[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> source1",
+						"flatten1 derive(corrected_timestamp = iif(length(toString({timestamp})) == 10, toInteger({timestamp}), toInteger(null())),",
+						"          location = 'Boston') ~> derivedColumn1",
+						"derivedColumn1 filter(!isNull({aqi}) && !isNull(corrected_timestamp)) ~> filter1",
+						"filter1 derive(corrected_timestamp = toTimestamp(toLong(corrected_timestamp) * 1000),",
+						"          id = concat(location, '_', toString(corrected_timestamp)),",
+						"          aqi = round(aqi, 2),",
+						"          co = round(co, 2),",
+						"          no = round(no, 2),",
+						"          no2 = round(no2, 2),",
+						"          o3 = round(o3, 2),",
+						"          so2 = round(so2, 2),",
+						"          pm2_5 = round(pm2_5, 2),",
+						"          pm10 = round(pm10, 2),",
+						"          nh3 = round(nh3, 2)) ~> derivedColumn2",
+						"derivedColumn2 select(mapColumn(",
+						"          lon,",
+						"          lat,",
+						"          aqi,",
+						"          co,",
+						"          no,",
+						"          no2,",
+						"          o3,",
+						"          so2,",
+						"          pm2_5,",
+						"          pm10,",
+						"          nh3,",
+						"          corrected_timestamp,",
+						"          location,",
+						"          id",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"source1 foldDown(unroll(list),",
+						"     mapColumn(",
+						"          lon = coord.lon,",
+						"          lat = coord.lat,",
+						"          aqi = list.main.aqi,",
+						"          co = list.components.co,",
+						"          no = list.components.no,",
+						"          no2 = list.components.no2,",
+						"          o3 = list.components.o3,",
+						"          so2 = list.components.so2,",
+						"          pm2_5 = list.components.pm2_5,",
+						"          pm10 = list.components.pm10,",
+						"          nh3 = list.components.nh3,",
+						"          timestamp = list.dt",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     partitionFileNames:['silver_airpollution_historical.parquet'],",
+						"     truncate: true,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ADLS_Air_Pollution')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Historical')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1170,125 +1289,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ADLS_Historical')]",
 				"[concat(variables('factoryId'), '/datasets/Parquet1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Air_Pollution')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ADLS_Air_Pollution",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Parquet2",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						},
-						{
-							"name": "derivedColumn1"
-						},
-						{
-							"name": "filter1"
-						},
-						{
-							"name": "derivedColumn2"
-						},
-						{
-							"name": "select1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          coord as (lon as double, lat as double),",
-						"          list as (main as (aqi as integer), components as (co as double, no as integer, no2 as double, o3 as double, so2 as double, pm2_5 as double, pm10 as double, nh3 as double), dt as integer)[]",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> source1",
-						"source1 foldDown(unroll(),",
-						"     mapColumn(",
-						"          lon = coord.lon,",
-						"          lat = coord.lat,",
-						"          aqi = list.main.aqi,",
-						"          co = list.components.co,",
-						"          no = list.components.no,",
-						"          no2 = list.components.no2,",
-						"          o3 = list.components.o3,",
-						"          so2 = list.components.so2,",
-						"          pm2_5 = list.components.pm2_5,",
-						"          pm10 = list.components.pm10,",
-						"          nh3 = list.components.nh3,",
-						"          timestamp = list.dt",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 derive(corrected_timestamp = iif(length(toString(timestamp)) == 10, toInteger(timestamp), toInteger(null())),",
-						"          location = 'Boston') ~> derivedColumn1",
-						"derivedColumn1 filter(!isNull(aqi) && !isNull(timestamp) && length(toString(timestamp)) == 10) ~> filter1",
-						"filter1 derive(corrected_timestamp = toTimestamp(toLong(corrected_timestamp) * 1000),",
-						"          id = concat(location, '_', toString(corrected_timestamp)),",
-						"          aqi = round(aqi, 2),",
-						"          co = round(co, 2),",
-						"          no = round(no, 2),",
-						"          no2 = round(no2, 2),",
-						"          o3 = round(o3, 2),",
-						"          so2 = round(so2, 2),",
-						"          pm2_5 = round(pm2_5, 2),",
-						"          pm10 = round(pm10, 2),",
-						"          nh3 = round(nh3, 2)) ~> derivedColumn2",
-						"derivedColumn2 select(mapColumn(",
-						"          lon,",
-						"          lat,",
-						"          aqi,",
-						"          co,",
-						"          no,",
-						"          no2,",
-						"          o3,",
-						"          so2,",
-						"          pm2_5,",
-						"          pm10,",
-						"          nh3,",
-						"          corrected_timestamp,",
-						"          location,",
-						"          id",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     partitionFileNames:['silver_airpollution_historical.parquet'],",
-						"     truncate: true,",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ADLS_Air_Pollution')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet2')]"
 			]
 		},
 		{
