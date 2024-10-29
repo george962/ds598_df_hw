@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "air_pollution.parquet",
+				"fileName": "silver_airpollution_historical.parquet",
 				"folderPath": "Silver",
 				"fileSystem": "container-ds598"
 			},
