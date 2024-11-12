@@ -486,52 +486,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Preprocess_Historical')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Historical",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Historical",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source2": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Historical')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Preprocess_Air_Pollution')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -575,6 +529,52 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/Air_Pollution')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Preprocess_Historical')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Historical",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Historical",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Historical')]"
 			]
 		},
 		{
@@ -1309,7 +1309,7 @@
 						"flatten2 derive(corrected_timestamp = iif(length(toString(timestamp)) > 10, 0, timestamp),",
 						"          location = 'Boston') ~> derivedColumn2",
 						"derivedColumn2 filter(!isNull(temp) && !isNull(humidity) && !isNull(corrected_timestamp) && length(toString(corrected_timestamp)) <= 10) ~> filter1",
-						"filter1 derive(corrected_timestamp = toTimestamp(toLong(corrected_timestamp) * 1000),",
+						"filter1 derive(date_time = toTimestamp(toLong(corrected_timestamp) * 1000),",
 						"          id = concat(location, '_', toString(corrected_timestamp)),",
 						"          temp_C = round(temp - 273.15, 2),",
 						"          temp_min_C = round(temp_min - 273.15, 2),",
@@ -1325,26 +1325,16 @@
 						"          weather_description_value = split(toString(weather_description), ': ')[1],",
 						"          weather_icon_value = split(toString(weather_icon), ': ')[1]) ~> derivedColumn3",
 						"derivedColumn3 select(mapColumn(",
-						"          message,",
-						"          cod,",
-						"          city_id,",
-						"          calctime,",
-						"          cnt,",
-						"          timestamp,",
 						"          feels_like,",
 						"          humidity,",
 						"          pressure,",
 						"          temp,",
 						"          temp_max,",
 						"          temp_min,",
-						"          weather_description,",
-						"          weather_icon,",
-						"          weather_id,",
-						"          weather_main,",
 						"          wind_deg,",
 						"          wind_speed,",
 						"          clouds_all,",
-						"          corrected_timestamp,",
+						"          date_time,",
 						"          location,",
 						"          id,",
 						"          temp_C,",
@@ -1359,7 +1349,8 @@
 						"          weather_id_value,",
 						"          weather_main_value,",
 						"          weather_description_value,",
-						"          weather_icon_value",
+						"          weather_icon_value,",
+						"          corrected_timestamp",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",

@@ -13,13 +13,13 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/Preprocess_Air_Pollution')]",
+			"name": "[concat(parameters('factoryName'), '/Preprocess_Historical')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Air_Pollution",
+						"name": "Historical",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -32,11 +32,11 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Air_Pollution",
+								"referenceName": "Historical",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {},
+									"source2": {},
 									"sink1": {}
 								}
 							},
