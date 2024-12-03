@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 6",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE DimWeatherCondition (\n    weather_id_value INT,\n    weather_icon_value VARCHAR(710),\n    weather_main_value VARCHAR(7100),\n    weather_description_value VARCHAR(7100),\n    weather_combined_value VARCHAR(7110)\n);\nGO\n\n-- Insert data into DimWeatherCondition\nINSERT INTO DimWeatherCondition (\n    weather_id_value, weather_icon_value, weather_main_value,\n    weather_description_value, weather_combined_value\n)\nSELECT DISTINCT\n    weather_id_value,\n    weather_icon_value,\n    weather_main_value,\n    weather_description_value,\n    CONCAT(weather_id_value, '_', weather_icon_value) AS weather_combined_value\nFROM ExternalWeather;\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQL_Pool",
+				"poolName": "SQL_Pool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
