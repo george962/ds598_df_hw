@@ -2,13 +2,13 @@
 	"name": "SQL script 6",
 	"properties": {
 		"content": {
-			"query": "CREATE TABLE DimWeatherCondition (\n    weather_id_value INT,\n    weather_icon_value VARCHAR(710),\n    weather_main_value VARCHAR(7100),\n    weather_description_value VARCHAR(7100),\n    weather_combined_value VARCHAR(7110)\n);\nGO\n\n-- Insert data into DimWeatherCondition\nINSERT INTO DimWeatherCondition (\n    weather_id_value, weather_icon_value, weather_main_value,\n    weather_description_value, weather_combined_value\n)\nSELECT DISTINCT\n    weather_id_value,\n    weather_icon_value,\n    weather_main_value,\n    weather_description_value,\n    CONCAT(weather_id_value, '_', weather_icon_value) AS weather_combined_value\nFROM ExternalWeather;\nGO",
+			"query": "-- Create DimLocation Table\nCREATE TABLE DimLocation (\n    id NVARCHAR(100),           -- Unique identifier for the location (e.g., id from ExternalWeather or ExternalAirPollution)\n    location VARCHAR(100),      -- Name of the location (city, region, or broader area)\n    lat FLOAT,                  -- Latitude of the location\n    lon FLOAT,                  -- Longitude of the location\n    weather_icon_value VARCHAR(100), -- Weather icon (optional based on ExternalWeather)\n    weather_main_value VARCHAR(100), -- Main weather type (optional based on ExternalWeather)\n    weather_description_value VARCHAR(255)  -- Detailed description of the weather (optional based on ExternalWeather)\n);\nGO\n-- Insert data into DimLocation from ExternalWeather or ExternalAirPollution\nINSERT INTO DimLocation (id, location, lat, lon, weather_icon_value, weather_main_value, weather_description_value)\nSELECT DISTINCT\n    id,                                -- Unique location identifier\n    location,                          -- Location name (e.g., city or area)\n    lat,                               -- Latitude\n    lon,                               -- Longitude\n    weather_icon_value,                -- Weather icon value (optional)\n    weather_main_value,                -- Main weather type (optional)\n    weather_description_value         -- Detailed weather description (optional)\nFROM\n    ExternalWeather                   -- You can also select from ExternalAirPollution if needed\nWHERE\n    location IS NOT NULL;             -- Ensure the location is not null\nGO\n",
 			"metadata": {
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "SQL_Pool",
-				"poolName": "SQL_Pool"
+				"databaseName": "hw",
+				"poolName": "hw"
 			},
 			"resultLimit": 5000
 		},

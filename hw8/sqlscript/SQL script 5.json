@@ -7,8 +7,8 @@
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "SQL_Pool",
-				"poolName": "SQL_Pool"
+				"databaseName": "hw",
+				"poolName": "hw"
 			},
 			"resultLimit": 5000
 		},

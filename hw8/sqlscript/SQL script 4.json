@@ -2,13 +2,13 @@
 	"name": "SQL script 4",
 	"properties": {
 		"content": {
-			"query": "DROP TABLE DimWeatherCondition;",
+			"query": "DROP TABLE DimLocation;",
 			"metadata": {
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "SQL_Pool",
-				"poolName": "SQL_Pool"
+				"databaseName": "hw",
+				"poolName": "hw"
 			},
 			"resultLimit": 5000
 		},
